@@ -1,4 +1,4 @@
-## Hi there 👋
+Website om details over onze Lan op te tonen en deelnemers de mogelijkheid te geven om in te schrijven.
 
 <!--
 **lanineenkerk/lanineenkerk** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
