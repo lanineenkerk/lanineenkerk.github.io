@@ -1,0 +1,728 @@
+/* =========================================
+   LAN in een Kerk – Basisthema (mobiel-first)
+========================================= */
+
+/* -------------------- */
+/* Design tokens        */
+/* -------------------- */
+:root {
+  color-scheme: dark;
+
+  --radius: 12px;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+
+  --brand: #00d26a;
+  --brand-600: #00a957;
+
+  --text: #f0f0f0;
+  --text-dim: #dddddd;
+
+  --bg: #0b0b0b;
+  --panel: rgba(0, 0, 0, 0.6);
+  --panel-2: rgba(255, 255, 255, 0.06);
+
+  --focus: #44ff9a;
+  --focus-outline: 3px solid var(--focus);
+}
+
+@supports (color: color-mix(in oklab, white, black)) {
+  :root {
+    --focus: color-mix(in oklab, var(--brand), white 30%);
+    --focus-outline: 3px solid var(--focus);
+  }
+}
+
+/* -------------------- */
+/* Basis / reset        */
+/* -------------------- */
+* { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable both-edges;
+}
+
+:target { scroll-margin-top: 10svh; }
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background: linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.75)),
+              url('img/main.png') center/cover no-repeat fixed;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+}
+
+@media (max-width: 600px) {
+  body { background-attachment: scroll; }
+}
+
+.container { width: min(100%, 960px); margin-inline: auto; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* Mini-SPA fade */
+body.is-transitioning main { opacity: .15; }
+main { transition: opacity .2s ease; }
+
+/* -------------------- */
+/* Header               */
+/* -------------------- */
+header {
+  padding: clamp(1rem, 3vw, 3rem) 1rem 0;
+  text-align: center;
+}
+.logo {
+  width: min(55vw, 200px);
+  height: auto;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,.7));
+  margin-bottom: .75rem;
+}
+h1 {
+  font-size: clamp(1.6rem, 4vw + .5rem, 3rem);
+  margin: 0 0 .3rem;
+  text-shadow: 0 0 10px #000;
+}
+header p {
+  font-size: clamp(1rem, 1.5vw + .5rem, 1.25rem);
+  color: var(--text-dim);
+  margin: 0 0 1.25rem;
+  text-shadow: 0 0 6px #000;
+}
+
+/* -------------------- */
+/* Navigatie (subtiel)  */
+/* -------------------- */
+.site-nav {
+  margin-top: .75rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: clamp(.5rem, 2.5vw, 1rem);
+}
+
+/* Standaardknoppen */
+.site-nav a,
+.site-nav .nav-dropdown > summary {
+  display: inline-block;
+  padding: .5rem 1rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.05);
+  color: var(--text-dim);
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,.1);
+  font-weight: 500;
+  transition: background .25s ease, color .25s ease, transform .06s ease;
+  cursor: pointer;
+}
+
+@supports (backdrop-filter: blur(6px)) {
+  .site-nav a,
+  .site-nav .nav-dropdown > summary {
+    backdrop-filter: blur(6px);
+  }
+}
+
+@media (hover: hover) {
+  .site-nav a:hover,
+  .site-nav .nav-dropdown > summary:hover {
+    background: rgba(255,255,255,.12);
+    color: var(--text);
+    transform: translateY(-1px);
+  }
+}
+
+.site-nav a:focus-visible,
+.site-nav .nav-dropdown > summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Actieve link */
+.site-nav a[aria-current="page"],
+.site-nav .dropdown-list a[aria-current="page"],
+.site-nav .nav-dropdown.is-active > summary {
+  background: rgba(0,210,106,0.18);
+  border-color: rgba(0,210,106,0.35);
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Dropdown */
+.nav-dropdown { position: relative; display: inline-block; }
+.nav-dropdown > summary::-webkit-details-marker { display: none; }
+.nav-dropdown > summary::after {
+  content: "▾";
+  margin-left: .5rem;
+  font-size: .85em;
+  opacity: .8;
+}
+
+.dropdown-list {
+  position: absolute;
+  left: 0; right: 0;
+  top: calc(100% + .5rem);
+  margin: 0; padding: .75rem;
+  list-style: none;
+  background: color-mix(in oklab, var(--bg) 75%, white 0%);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  min-width: 220px;
+  z-index: 50;
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity .18s ease, transform .18s ease;
+}
+
+.nav-dropdown[open] > .dropdown-list {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.dropdown-list a {
+  display: block;
+  padding: .65rem .85rem;
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  margin-block: .25rem;
+  border: 1px solid transparent;
+  transition: background .2s ease, border-color .2s ease;
+}
+
+@media (hover: hover) {
+  .dropdown-list a:hover {
+    background: rgba(255,255,255,.08);
+    border-color: rgba(255,255,255,.12);
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-dropdown,
+  .nav-dropdown > summary {
+    width: auto;         /* ❌ niet meer 100% */
+    text-align: center;
+  }
+  .dropdown-list {
+    min-width: unset;
+    left: 0;
+    right: auto;
+  }
+}
+
+/* -------------------- */
+/* Main / content       */
+/* -------------------- */
+main {
+  flex: 1;
+  width: min(100%, 960px);
+  margin: 20px auto clamp(1rem, 3vw, 2rem);
+  padding-block: 0; /* geen boven/onder padding */
+  padding-inline: clamp(1rem, 2vw, 1.5rem);
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: opacity .2s ease;
+}
+
+section { margin-block: clamp(1rem, 3vw, 2rem); }
+
+h2 {
+  font-size: clamp(1.25rem, 1.2vw + 1rem, 1.75rem);
+  margin: 0 0 .75rem;
+}
+
+ul { padding-left: 1.2rem; margin: .25rem 0 0; }
+
+/* -------------------- */
+/* Afbeeldingen         */
+/* -------------------- */
+.responsive-img {
+  width: clamp(200px, 40vw, 400px);
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  margin-top: 1rem;
+  display: block;
+  margin-inline: auto;
+}
+
+/* Tekst + afbeelding naast elkaar (index, responsive) */
+.section-with-image {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+.section-with-image > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.section-with-image img {
+  width: clamp(120px, 30vw, 240px);
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.35);
+  align-self: center;
+}
+@media (max-width: 700px) {
+  .section-with-image {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .section-with-image img {
+    order: -1;
+    margin-inline: auto;
+  }
+  .section-with-image ul {
+    text-align: left;
+    margin: 0 auto;
+    display: inline-block;
+  }
+}
+
+/* -------------------- */
+/* CTA                  */
+/* -------------------- */
+.cta-wrap {
+  text-align: center;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+.cta-button {
+  display: inline-block;
+  background: var(--brand);
+  color: #000;
+  padding: clamp(.8rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem);
+  font-size: clamp(1rem, 1.2vw + .85rem, 1.2rem);
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: transform .06s ease, background .25s ease;
+  will-change: transform;
+}
+@media (hover: hover) {
+  .cta-button:hover { background: var(--brand-600); transform: translateY(-1px); }
+}
+.cta-button:active { transform: translateY(0); }
+.cta-button:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 3px;
+}
+
+/* -------------------- */
+/* Zitplan (gallery)    */
+/* -------------------- */
+.zitplan-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.zitplan-gallery img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  cursor: zoom-in;
+  transition: transform .2s ease;
+}
+@media (hover: hover) {
+  .zitplan-gallery a:hover img { transform: scale(1.02); }
+}
+@media (max-width: 700px) {
+  .hide-mobile { display: none; }
+}
+
+/* -------------------- */
+/* Lightbox (CSS-only)  */
+/* -------------------- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0,0,0,0);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 999;
+  transition: opacity .45s ease, background .45s ease, visibility 0s linear .45s;
+  will-change: opacity, background;
+  contain: layout paint size;
+}
+.lightbox:target,
+.lightbox.is-open {
+  background: rgba(0,0,0,.88);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity .45s ease, background .45s ease, visibility 0s;
+}
+.lightbox img {
+  max-width: 95%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 0 25px rgba(0,0,0,.6);
+  transform: scale(.92) translateY(8px);
+  opacity: 0;
+  transition: transform .45s cubic-bezier(.22,.61,.36,1), opacity .45s ease;
+  will-change: transform, opacity;
+}
+.lightbox:target img,
+.lightbox.is-open img {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+.lightbox-bg {
+  position: absolute; inset: 0;
+  cursor: zoom-out;
+}
+.lightbox .close {
+  position: absolute;
+  top: 1rem; right: 1.5rem;
+  font-size: 2.5rem;
+  color: #fff;
+  text-decoration: none;
+  transition: transform .2s ease, color .2s ease;
+}
+@media (hover: hover) {
+  .lightbox .close:hover { transform: scale(1.06); color: var(--brand); }
+}
+body.no-scroll { overflow: hidden; }
+
+/* -------------------- */
+/* Formulieren          */
+/* -------------------- */
+#inschrijven h2 { text-align: center; }
+
+.inschrijfformulier {
+  background: var(--panel-2);
+  padding: clamp(1rem, 2.5vw, 2rem);
+  border-radius: var(--radius);
+  width: min(100%, 700px);
+  margin: 1.25rem auto 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.inschrijfformulier label {
+  font-weight: 700;
+  margin-bottom: .3rem;
+}
+
+.inschrijfformulier input[type="text"],
+.inschrijfformulier input[type="email"] {
+  padding: .85rem;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 8px;
+  background: #1f1f1f;
+  color: var(--text);
+  width: 100%;
+}
+
+.inschrijfformulier input:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 3px;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .3rem;
+  margin-left: .25rem;
+}
+.radio-group {
+  display: grid;
+  grid-auto-flow: row;
+  gap: .3rem;
+}
+
+.inschrijfformulier button {
+  background: var(--brand);
+  color: #000;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background .25s ease;
+}
+@media (hover: hover) {
+  .inschrijfformulier button:hover { background: var(--brand-600); }
+}
+.inschrijfformulier button:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 3px;
+}
+
+/* -------------------- */
+/* Footer               */
+/* -------------------- */
+footer {
+  background: var(--panel);
+  text-align: center;
+  padding: 1rem;
+  font-size: .95rem;
+  color: #aaa;
+  border-radius: var(--radius);
+  width: min(100%, 960px);
+  margin: 0 auto 1rem;
+  box-shadow: var(--shadow);
+}
+footer p {
+  margin: .5rem 0 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .75rem 1rem;
+}
+footer a { color: var(--brand); text-decoration: none; }
+@media (hover: hover) {
+  footer a:hover { text-decoration: underline; }
+}
+footer a:focus-visible {
+  outline: 2px dashed var(--brand);
+  outline-offset: 3px;
+}
+
+/* -------------------- */
+/* Responsive tweaks     */
+/* -------------------- */
+@media (min-width: 768px) {
+  .checkbox-group {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .radio-group {
+    grid-auto-flow: column;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+  }
+}
+@media (min-width: 1024px) {
+  .cta-button { font-size: 1.2rem; }
+}
+
+/* =============================== */
+/* Media layout: tekst + afbeelding */
+/* =============================== */
+
+.media {
+  display: grid;
+  grid-template-columns: 3fr 1fr; /* 75% tekst | 25% afbeelding */
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Afbeelding rechts (standaard) */
+.media .media-text { grid-column: 1; }
+.media .media-img  { grid-column: 2; }
+
+/* Variant: afbeelding links */
+.media--left {
+  grid-template-columns: 1fr 3fr; /* 25% afbeelding | 75% tekst */
+}
+.media--left .media-img  { grid-column: 1; }
+.media--left .media-text { grid-column: 2; }
+
+/* Afbeeldingstijl */
+.media .media-img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.35);
+  display: block;
+  margin: 0 auto;
+  max-width: none; /* afbeelding schaalt met kolom mee */
+}
+
+/* Mobiel: alles onder elkaar, centraal uitgelijnd */
+@media (max-width: 700px) {
+  .media {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .media .media-text {
+    text-align: left;
+    margin: 0 auto;
+    max-width: 60ch;
+  }
+
+  .media .media-img {
+    grid-column: 1;
+    width: clamp(160px, 60vw, 420px);
+    margin: 0 auto;
+  }
+}
+/* ====== Media modifiers (kolomverdelers) ====== */
+/* Standaard .media = 75% tekst | 25% beeld (3fr 1fr) */
+
+.media--40 {                      /* ±60% tekst | 40% beeld */
+  grid-template-columns: 3fr 2fr;
+}
+.media--left.media--40 {          /* beeld links */
+  grid-template-columns: 2fr 3fr;
+}
+
+/* Beeld iets kleiner maken zonder de 75/25-verdeling te veranderen */
+.media--compact .media-img {
+  max-width: clamp(120px, 22vw, 220px);
+}
+
+/* DO & DON'Ts: op kleine schermen beeld boven de tekst */
+@media (max-width: 700px) {
+  #dos .media .media-img,
+  #donts .media .media-img {
+    order: -1;
+    margin-bottom: .5rem;
+  }
+}
+/* DO & DON'Ts: mobiel => beeld boven tekst */
+@media (max-width: 700px) {
+  /* één kolom, ook voor .media--left */
+  .media,
+  .media--left {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* kolomtoewijzingen resetten */
+  .media .media-img,
+  .media .media-text {
+    grid-column: auto !important;
+  }
+
+  /* beeld bovenaan */
+  #dos .media .media-img,
+  #donts .media .media-img {
+    order: -1;
+    margin-bottom: .5rem;
+  }
+
+  /* nette breedtes */
+  #dos .media .media-img,
+  #donts .media .media-img {
+    width: 100%;
+    max-width: clamp(140px, 60vw, 420px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* tekst goed leesbaar in het midden */
+  #dos .media .media-text,
+  #donts .media .media-text {
+    max-width: 60ch;
+    margin: 0 auto;
+    text-align: left;
+  }
+}
+/* ================================================= */
+/* Media met bredere afbeelding (≈60% tekst / 40% beeld) */
+/* ================================================= */
+.media--wideimg {
+  grid-template-columns: 3fr 2fr; /* tekst | beeld */
+}
+
+.media--left.media--wideimg {
+  grid-template-columns: 2fr 3fr; /* beeld | tekst */
+}
+
+
+/* ========================================= */
+/* Hamburger menu (mobiel) */
+/* ========================================= */
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 28px;
+  height: 22px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001; /* boven nav */
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Actieve toestand (kruisje) */
+.hamburger.is-active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+.hamburger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.is-active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobiel layout */
+@media (max-width: 768px) {
+  .hamburger { display: flex; margin-left: auto; }
+
+  .site-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(8px);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4rem 1.5rem;
+    gap: 1rem;
+    transition: right 0.35s ease;
+    z-index: 1000;
+  }
+
+  .site-nav.is-open {
+    right: 0;
+  }
+
+  .site-nav a,
+  .nav-dropdown > summary {
+    width: 100%;
+    text-align: left;
+    font-size: 1.1rem;
+  }
+
+  .nav-dropdown[open] > .dropdown-list {
+    position: static;
+    box-shadow: none;
+    background: none;
+    border: none;
+    padding-left: 1rem;
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+}

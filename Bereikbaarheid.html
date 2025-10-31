@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="img/favicon-32x32.png" type="image/x-icon" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preload" href="img/main.png" as="image" />
+  <link rel="preload" href="img/parking.png" as="image">
+  <title>Bereikbaarheid – LAN Party in een Kerk</title>
+  <meta name="description" content="Hoe geraak je vlot naar LAN in een Kerk? Info over parkeren, openbaar vervoer en fietsen.">
+</head>
+<body>
+  <header>
+    <img src="img/logo.png" alt="LAN Party Logo" class="logo" loading="lazy" />
+    <h1>LAN Party in een Kerk</h1>
+    <p>21 februari 2026 10u – 22 februari 2026 10u</p>
+
+<!-- Hamburger knop (zichtbaar op kleine schermen) -->
+<button class="hamburger" aria-label="Menu openen" aria-expanded="false" aria-controls="main-nav">
+  <span></span><span></span><span></span>
+</button>
+
+<nav id="main-nav" class="site-nav" aria-label="Hoofdmenu">
+  <a href="index.html">Home</a>
+  <details class="nav-dropdown">
+    <summary aria-haspopup="menu">Praktische info</summary>
+    <ul class="dropdown-list" role="menu">
+      <li><a href="Bereikbaarheid.html">Bereikbaarheid</a></li>
+      <li><a href="meenemen.html">Wat neem ik mee?</a></li>
+      <li><a href="slapen.html">Slapen</a></li>
+      <li><a href="zitplan.html">Zitplan</a></li>
+      <li><a href="catering.html">Catering</a></li>
+    </ul>
+  </details>
+  <a href="Wat%20is%20LAN.html">Wat is LAN in een kerk?</a>
+  <a href="do-and-donts.html">Do's &amp; Don'ts</a>
+  <a href="Over%20ons.html">Over ons</a>
+</nav>
+
+  </header>
+
+  <main>
+    <section id="bereikbaarheid">
+      <h2>Adres</h2>
+      <p>De Gam: Kardinaal Cardijnstraat 31a, 2840 Rumst.</p>
+    </section>
+
+    <section id="parkeren">
+      <h2>Parkeren</h2>
+      <p>Bij aankomst is het mogelijk om je materiaal uit te laden aan de parking bij de kerk. Deze zone is uitsluitend bedoeld voor kortstondig uitladen. Om dit duidelijk te maken, zal de organisatie parkeerverbodsborden plaatsen. Na het uitladen vragen we vriendelijk om je wagen te verplaatsen naar een van de aangeduide parkeerplaatsen verderop, zoals te zien op de afbeelding op deze pagina. </p>
+      <p><span>Let op.</span> Er zijn slechts 60 parkeerplaatsen beschikbaar. Probeer te carpoolen indien mogelijk.</p>
+      <p>Volg de signalisatie ter plaatse en respecteer de richtlijnen van de organisatie. Zo houden we de omgeving veilig en toegankelijk voor iedereen.</p>
+      
+          <!-- Parking-afbeelding met zoom -->
+    <div class="image-gallery" style="margin-top: 1rem;">
+      <a href="#img-parking" class="zoomable">
+        <img
+          src="img/parking.png"
+          alt="Overzicht met aangeduide parkeermogelijkheden en looproutes"
+          class="responsive-img"
+          style="cursor: zoom-in;">
+      </a>
+    </div>
+
+    <!-- Lightbox voor parking -->
+    <div class="lightbox" id="img-parking" role="dialog" aria-modal="true" aria-label="Vergrote weergave van het parkeerplan">
+      <a href="#" class="lightbox-bg" aria-label="Sluiten"></a>
+      <img
+        src="img/parking.png"
+        alt="Vergrote weergave van het parkeerplan"
+        loading="eager"
+        decoding="async"
+        width="1600"
+        height="900">
+      <a href="#" class="close" aria-label="Sluiten">×</a>
+    </div>
+
+    </section>
+
+
+    <section id="fiets">
+      <h2>Met de fiets</h2>
+      <p>Kom je met de fiets?... Dapper!</p>
+      <p>Voor de dapperen is er een fietsenstalling voorzien.</p>
+        <img src="img/fiets.png" alt="Fietsparkeerplaats bij de kerk" class="responsive-img">
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2026 LAN Party in een Kerk – All rights reserved.
+    <p>
+      <a href="https://www.rumst.be/activiteiten/detail/1278/lan-party-in-een-kerk" target="_blank" rel="noopener noreferrer">Rumst gemeente</a>
+      <a href="https://www.uitinvlaanderen.be/agenda/e/lan-party-in-een-kerk/9b074acc-d87d-4f96-b7ed-d733fab4bbb0" target="_blank" rel="noopener noreferrer">UitInVlaanderen</a>
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.uitinvlaanderen.be/agenda/e/lan-party-in-een-kerk/9b074acc-d87d-4f96-b7ed-d733fab4bbb0" target="_blank" rel="noopener noreferrer">Facebook</a>
+    </p>
+  </footer>
+
+  <script src="menu.js"></script>
+  <script src="spa.js"></script>
+  <script src="lightbox.js"></script>
+
+</body>
+</html>
