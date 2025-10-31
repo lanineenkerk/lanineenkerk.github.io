@@ -259,17 +259,18 @@ ul { padding-left: 1.2rem; margin: .25rem 0 0; }
   margin-inline: auto;
 }
 
-/* Grotere, maar nog steeds responsieve afbeelding (bijv. parking, zitplan) */
+/* Grote, responsieve afbeelding die binnen de main-kader blijft */
 .wide-img {
-  width: clamp(280px, 85vw, 1100px); /* groter bereik */
+  display: block;
+  width: 100%;
+  max-width: min(90vw, 960px); /* blijft binnen de main (die max 960px breed is) */
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0,0,0,.4);
-  margin-top: 1rem;
-  display: block;
-  margin-inline: auto;
-  object-fit: contain; /* behoud verhoudingen, vult nooit te veel */
+  margin: 1rem auto;
+  object-fit: contain; /* behoud verhoudingen */
 }
+
 
 
 /* Tekst + afbeelding naast elkaar (index, responsive) */
@@ -784,5 +785,6 @@ footer a:focus-visible {
 
   body.menu-open { overflow: hidden; }
 }
+
 
 
