@@ -91,4 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+  // Sluit het hamburger-menu zodra een link wordt aangeklikt
+  nav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      btn.classList.remove('is-active');
+      nav.classList.remove('is-open');
+      document.body.classList.remove('menu-open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+
 
