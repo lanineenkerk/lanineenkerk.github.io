@@ -259,6 +259,19 @@ ul { padding-left: 1.2rem; margin: .25rem 0 0; }
   margin-inline: auto;
 }
 
+/* Grotere, maar nog steeds responsieve afbeelding (bijv. parking, zitplan) */
+.wide-img {
+  width: clamp(280px, 85vw, 1100px); /* groter bereik */
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  margin-top: 1rem;
+  display: block;
+  margin-inline: auto;
+  object-fit: contain; /* behoud verhoudingen, vult nooit te veel */
+}
+
+
 /* Tekst + afbeelding naast elkaar (index, responsive) */
 .section-with-image {
   display: grid;
@@ -771,4 +784,5 @@ footer a:focus-visible {
 
   body.menu-open { overflow: hidden; }
 }
+
 
