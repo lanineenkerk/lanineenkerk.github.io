@@ -1,40 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
   const btn = document.querySelector('.hamburger');
   const nav = document.querySelector('.site-nav');
-
   if (!btn || !nav) return;
 
-  // Open/sluit menu
+  // open/close
   btn.addEventListener('click', () => {
-    const expanded = btn.classList.toggle('is-active');
-    btn.setAttribute('aria-expanded', expanded);
-    nav.classList.toggle('is-open', expanded);
-    document.body.classList.toggle('menu-open', expanded);
+    const open = !btn.classList.contains('is-active');
+    btn.classList.toggle('is-active', open);
+    nav.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    btn.setAttribute('aria-expanded', String(open));
   });
 
-  // Klik buiten menu → sluit
+  // klik buiten → sluit
   document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && !btn.contains(e.target)) {
-      closeMenu();
-    }
+    if (!nav.contains(e.target) && !btn.contains(e.target)) closeMenu();
   });
 
   // ESC → sluit
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeMenu();
-    }
+    if (e.key === 'Escape') closeMenu();
   });
 
-  // ✅ Klik op een link (of dropdown-item) → sluit volledig menu
-  nav.querySelectorAll('a, summary').forEach(el => {
-    el.addEventListener('click', () => {
-      // Wacht een fractie zodat de link kan navigeren
-      setTimeout(() => closeMenu(), 150);
-    });
-  });
+  // ✅ BELANGRIJK: sluit direct bij link-activatie (voor navigatie/SP A)
+  // werkt voor alle <a> in het menu, ook dropdown-items; geen preventDefault.
+  nav.addEventListener('pointerdown', (e) => {
+    const link = e.target.closest('a[href]:not([target="_blank"])');
+    if (!link) return;
+    closeMenu();
+  }, true); // capture = vóór de eigenlijke navigatie
 
-  // Helper: menu sluiten
+  // Back/forward → menu dicht
+  window.addEventListener('popstate', closeMenu);
+
   function closeMenu() {
     btn.classList.remove('is-active');
     nav.classList.remove('is-open');
@@ -42,3 +40,5 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.setAttribute('aria-expanded', 'false');
   }
 });
+
+
