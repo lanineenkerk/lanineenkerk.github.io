@@ -726,3 +726,49 @@ footer a:focus-visible {
     overflow: hidden;
   }
 }
+/* Overlay voor off-canvas menu */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  backdrop-filter: blur(2px);
+  cursor: pointer;
+  z-index: 1100;        /* onder nav, boven pagina */
+}
+
+/* Zorg dat het nav-paneel boven de overlay staat */
+@media (max-width: 768px) {
+  .hamburger { z-index: 1201; }
+
+  .site-nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    max-width: 320px;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 4rem 1.5rem;
+    gap: 1rem;
+    transition: right .35s ease;
+    z-index: 1200;     /* boven overlay */
+    pointer-events: auto;
+  }
+  .site-nav.is-open { right: 0; }
+
+  .site-nav a,
+  .nav-dropdown > summary {
+    width: 100%;
+    text-align: left;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 1201;     /* veilig boven eventuele pseudo’s */
+  }
+
+  body.menu-open { overflow: hidden; }
+}
+
