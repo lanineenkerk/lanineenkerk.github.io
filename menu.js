@@ -1,45 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const btn = document.querySelector('.hamburger');
-  const nav = document.querySelector('.site-nav');
-  if (!btn || !nav) return;
+  const hamburger = document.querySelector('.hamburger');
+  const nav       = document.getElementById('main-nav');
+  const overlay   = document.querySelector('.menu-overlay');
 
-  // open/close
-  btn.addEventListener('click', () => {
-    const open = !btn.classList.contains('is-active');
-    btn.classList.toggle('is-active', open);
-    nav.classList.toggle('is-open', open);
-    document.body.classList.toggle('menu-open', open);
-    btn.setAttribute('aria-expanded', String(open));
+  if (!hamburger || !nav || !overlay) return;
+
+  function openMenu() {
+    document.body.classList.add('menu-open');
+    nav.classList.add('is-open');
+    hamburger.classList.add('is-active');
+    overlay.hidden = false;
+  }
+
+  function closeMenu() {
+    document.body.classList.remove('menu-open');
+    nav.classList.remove('is-open');
+    hamburger.classList.remove('is-active');
+    overlay.hidden = true;
+  }
+
+  // Toggle met hamburger
+  hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (nav.classList.contains('is-open')) closeMenu(); else openMenu();
   });
 
-  // klik buiten → sluit
-  document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && !btn.contains(e.target)) closeMenu();
+  // Klik op overlay => sluit menu
+  overlay.addEventListener('click', () => {
+    closeMenu();
   });
 
-  // ESC → sluit
+  // Klik op link in nav (capture) => sluit menu, daarna normale navigatie/SPA
+  nav.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    // Laat normale navigatie/SPA z’n werk doen; alleen sluiten
+    closeMenu();
+  }, true);
+
+  // Escape => sluit menu
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeMenu();
   });
 
-  // ✅ BELANGRIJK: sluit direct bij link-activatie (voor navigatie/SP A)
-  // werkt voor alle <a> in het menu, ook dropdown-items; geen preventDefault.
-nav.addEventListener('click', (e) => {
-  const link = e.target.closest('a[href]:not([target="_blank"])');
-  if (!link) return;                 // alleen echte links
-  closeMenu();                       // sluit zonder preventDefault
-}, true);
-
-  // Back/forward → menu dicht
-  window.addEventListener('popstate', closeMenu);
-
-  function closeMenu() {
-    btn.classList.remove('is-active');
-    nav.classList.remove('is-open');
-    document.body.classList.remove('menu-open');
-    btn.setAttribute('aria-expanded', 'false');
-  }
+  // (Optioneel) klik buiten nav (zonder overlay) => sluit menu
+  // Met overlay is dit niet echt nodig, maar voor de zekerheid:
+  document.addEventListener('click', (e) => {
+    if (!nav.classList.contains('is-open')) return;
+    if (nav.contains(e.target) || hamburger.contains(e.target)) return;
+    closeMenu();
+  });
 });
-
-
-
