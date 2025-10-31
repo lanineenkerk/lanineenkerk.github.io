@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ✅ BELANGRIJK: sluit direct bij link-activatie (voor navigatie/SP A)
   // werkt voor alle <a> in het menu, ook dropdown-items; geen preventDefault.
-  nav.addEventListener('pointerdown', (e) => {
-    const link = e.target.closest('a[href]:not([target="_blank"])');
-    if (!link) return;
-    closeMenu();
-  }, true); // capture = vóór de eigenlijke navigatie
+nav.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href]:not([target="_blank"])');
+  if (!link) return;                 // alleen echte links
+  closeMenu();                       // sluit zonder preventDefault
+}, true);
 
   // Back/forward → menu dicht
   window.addEventListener('popstate', closeMenu);
@@ -40,5 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.setAttribute('aria-expanded', 'false');
   }
 });
+
 
 
