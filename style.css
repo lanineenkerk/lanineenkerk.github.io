@@ -726,3 +726,22 @@ footer a:focus-visible {
     overflow: hidden;
   }
 }
+
+
+/* --- VEILIGE IMAGE-RESET (globaal) --- */
+img {
+  max-width: 100%;
+  height: auto;         /* behoud aspect-ratio */
+  display: block;
+}
+
+/* --- LIGHTBOX: forceer contain-schaal --- */
+.lightbox img {
+  width: auto !important;      /* voorkom width:100% die uitrekt */
+  height: auto !important;     /* voorkom height:100% die uitrekt */
+  max-width: 95vw !important;  /* past binnen viewport breedte */
+  max-height: 90vh !important; /* past binnen viewport hoogte */
+  object-fit: contain;         /* extra zekerheid, ondersteunt img element */
+}
+
+
